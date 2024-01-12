@@ -1,25 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-</head>
-<body>
-    <h1>Welcome to the Home Page!</h1>
-    <p>Enter your user ID:</p>
-    <input type="text" id="userIdInput" placeholder="User ID">
-    <button onclick="redirectToUserPage()">Go to User Page</button>
 
-    <script>
-        function redirectToUserPage() {
-            const userId = document.getElementById('userIdInput').value;
-            if (userId) {
-                window.location.href = `/user/${userId}`;
-            } else {
-                alert("Please enter a user ID.");
-            }
-        }
-    </script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Dates2Remember</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Custom styles -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .jumbotron {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+
+    .features {
+      padding: 60px 0;
+    }
+
+    .feature {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .tech-stack {
+      background-color: #ffffff;
+      padding: 60px 0;
+    }
+
+    .contribute {
+      background-color: #f8f9fa;
+      padding: 60px 0;
+    }
+
+    .footer {
+      background-color: #343a40;
+      color: #ffffff;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Dates2Remember</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/createnew">Create New</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Your Memory's New BFF</h1>
+      <p class="lead">Welcome to Dates2Remember, where forgetting important dates is a thing of the past!</p>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="container features">
+    <div class="row">
+      <div class="col-md-4 feature">
+        <h2>Effortless Storage</h2>
+        <p>Save your crucial dates and memorable events with just a few clicks.</p>
+      </div>
+      <div class="col-md-4 feature">
+        <h2>Smart Calculations</h2>
+        <p>Let Dates2Remember crunch the numbers and tell you how many days until your next celebration.</p>
+      </div>
+      <div class="col-md-4 feature">
+        <h2>Personalized Reminders</h2>
+        <p>Receive friendly nudges right when you need them, so you're always ahead of the game.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Stack Section -->
+  <div class="container tech-stack">
+    <h2 class="text-center mb-4">Tech Magic Behind the Curtain</h2>
+    <div class="row">
+      <div class="col-md-3 offset-md-3 text-center">
+        <h4>Python</h4>
+      </div>
+      <div class="col-md-3 text-center">
+        <h4>Flask</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 offset-md-3 text-center">
+        <h4>DynamoDB</h4>
+      </div>
+      <div class="col-md-3 text-center">
+        <h4>Bootstrap</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contribute Section -->
+  <div class="container contribute">
+    <h2 class="text-center mb-4">Contribute and Make Memories Together</h2>
+    <p class="text-center">Dates2Remember is open to contributions! Whether you're a coding wizard or have a knack for design, your skills are more than welcome. Let's make Dates2Remember even more unforgettable!</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="container-fluid footer">
+    <p>&copy; 2024 Dates2Remember. All rights reserved.</p>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
+
 </html>
