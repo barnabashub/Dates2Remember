@@ -12,5 +12,9 @@ def welcome():
 def user_page(user_id):
     return render_template('d.html')
 
+@app.route('/createnew')
+def call_create_new_page():
+    return render_template('create_new.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
