@@ -26,7 +26,11 @@ def welcome():
 # User page with id
 @app.route('/d/<user_id>')
 def user_page(user_id):
-    return render_template('d.html')
+    if "Item" in userids.get_item(Key={'userID': str(user_id)}):
+        return render_template('d.html')
+        
+    else:
+        return render_template('404.html')
 
 # Create new user page
 @app.route('/createnew')
