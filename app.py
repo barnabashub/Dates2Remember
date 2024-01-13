@@ -3,18 +3,26 @@ from flask_wtf.csrf import CSRFProtect
 import boto3
 from datetime import datetime
 import uuid
+import os
+import yaml
+
+# Read the config file
+try:
+    with open('config/config_basic.yml', 'r') as file:
+        config = yaml.safe_load(file)
+except FileNotFoundError as e:
+    print(e)
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
-app.config['SECRET_KEY'] = 'your_random_secret_key' #TODO need to be changed
+app.config['SECRET_KEY'] = config['appconfigsecretkey']
 
 # AWS DynamoDB configurations
 dynamodb = boto3.resource(
-    'dynamodb',
-    region_name='eu-north-1',
-    aws_access_key_id='AKIAYH4CNSTBQAJ5LWIH',
-    aws_secret_access_key='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'
-)
+                        config['db'],
+                        region_name = config['region'], 
+                        aws_access_key_id = config['keyid'],
+                        aws_secret_access_key = config['key'])
 table = dynamodb.Table('dates')
 userids = dynamodb.Table('userids')
 
