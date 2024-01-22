@@ -23,8 +23,13 @@ dynamodb = boto3.resource(
                         region_name = config['region'], 
                         aws_access_key_id = config['keyid'],
                         aws_secret_access_key = config['key'])
-table = dynamodb.Table('dates')
-userids = dynamodb.Table('userids')
+
+table = dynamodb.Table(config['datestable'])
+print("log: ", [table.name for table in dynamodb.tables.all()])
+userids = dynamodb.Table('users')
+# Check if 'userids' table exists
+if 'userids' not in [table.name for table in dynamodb.tables.all()]:
+    print("Error: 'userids' table does not exist.")
 
 # Welcome page
 @app.route('/')
@@ -34,6 +39,7 @@ def welcome():
 # User page with id
 @app.route('/d/<user_id>')
 def user_page(user_id):
+    print("errorlog: ", str(user_id))
     if "Item" in userids.get_item(Key={'userID': str(user_id)}):
         return render_template('d.html')
         
@@ -48,9 +54,12 @@ def call_create_new_page():
 #Post new user id
 @app.route('/create_new', methods=['POST'])
 def save_data():
+    print("function called")
     # Function checks if userid is reserved
     def is_uuid_reserved(check_uuid):
+        print("next to check id")
         response = userids.get_item(Key={'userID': str(check_uuid)})
+        print("id check is ready")
         return 'Item' in response
     
     newID = str(uuid.uuid4())
@@ -58,13 +67,17 @@ def save_data():
         while is_uuid_reserved(newID):
             newID = str(uuid.uuid4())
 
+    print("new id is ready")
+
     try:
         new_item = {
             'userID': newID,
             'name': request.form.get('dataName'),
             'date': str(datetime.now())
         }
+        print("next is put item")
         userids.put_item(Item=new_item)
+        print("put item is ready")
         return jsonify({'message': 'Data saved successfully'})
     except Exception as e:
         return {'error': str(e)}
