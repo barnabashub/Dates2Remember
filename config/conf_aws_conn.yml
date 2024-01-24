@@ -1,6 +1,0 @@
-'db': 'dynamodb'
-'region': 'eu-north-1'
-'keyid': 'AKIAYH4CNSTBQAJ5LWIH'
-'key': 'n/qX53snnOavsAbv3D38DUjXlpddD7F9rp+YantR'
-'appconfigsecretkey': 'your_random_secret_key'
-'ignore': 'test2'
