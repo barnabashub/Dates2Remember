@@ -1,6 +1,0 @@
-host: localhost
-port: 5455
-database: postgresDB
-user: postgresUser
-password: postgresPW
-appconfigsecretkey: your_random_secret_key
