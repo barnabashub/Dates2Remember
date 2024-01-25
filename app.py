@@ -43,10 +43,13 @@ def welcome():
 # User page with id
 @app.route('/d/<user_id>')
 def user_page(user_id):
-    cursor.execute(f'select user_id from users where user_id = {user_id}')
-    if len(cursor.fetchall()) == 1:
-        return render_template('d.html')
-    else:
+    try:
+        cursor.execute(f'select user_id from users where user_id = {user_id}')
+        if len(cursor.fetchall()) == 1:
+            return render_template('d.html')
+        else: return render_template('404.html')
+    except Exception as e:
+        print(e)
         return render_template('404.html')
 
 # Create new user page
@@ -66,7 +69,25 @@ def save_data():
 # File getter
 @app.route('/static/<filename>')
 def serve_static(filename):
+    print(f"getting file {filename}")
     return send_from_directory('templates', filename)
+
+# 404 error
+@app.errorhandler(404) 
+def not_found(e): 
+  return render_template("404.html") 
+
+@app.route("/api/data/<user_id>/getsaveddatas")
+def getsaveddatas(user_id):
+    cursor.execute(f"select * from dates where userid = {user_id}")
+    list = []
+    for record in cursor.fetchall():
+        act_rec = []
+        for item in record:
+            act_rec.append(str(item))
+        list.append(act_rec)
+    print("now ", list)
+    return jsonify(list)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
