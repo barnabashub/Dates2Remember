@@ -3,11 +3,7 @@ const userId = window.location.pathname.split('/').pop();
 
 // Fetch data from the backend using the user-specific API endpoint
 fetch(`/api/data/${userId}/getsaveddatas`)
-    .then(response => {
-        // Log the response JSON
-        console.log('Response JSON:', response.json());
-        return response.json();
-    })
+    .then(response => response.json())  // Convert the response to JSON
     .then(data => {
         // Function to create and populate table rows
         function createTableRow(date, event) {
@@ -24,7 +20,7 @@ fetch(`/api/data/${userId}/getsaveddatas`)
 
         // Iterate through the data and add rows to the table
         data.forEach(item => {
-            const row = createTableRow(item.date, item.event);
+            const row = createTableRow(item[1], item[2]);  // Assuming index 1 is date and index 2 is event
             tableBody.appendChild(row);
         });
     })

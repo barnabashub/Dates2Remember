@@ -44,7 +44,7 @@ def welcome():
 @app.route('/d/<user_id>')
 def user_page(user_id):
     try:
-        cursor.execute(f'select user_id from users where user_id = {user_id}')
+        cursor.execute(f"select user_id from users where user_id = '{user_id}'")
         if len(cursor.fetchall()) == 1:
             return render_template('d.html')
         else: return render_template('404.html')
@@ -62,7 +62,8 @@ def call_create_new_page():
 def save_data():
     try:
         cursor.execute(f"insert into users (username, creationdate) values ('{request.form.get('dataName')}', '{str(datetime.now())}')")
-        return jsonify({'message': 'Data saved successfully'})
+        cursor.execute("select * from users")
+        return jsonify({'message': 'Data saved successfully', 'select': cursor.fetchall()})
     except Exception as e:
         return {'error': str(e)}
 
@@ -79,7 +80,7 @@ def not_found(e):
 
 @app.route("/api/data/<user_id>/getsaveddatas")
 def getsaveddatas(user_id):
-    cursor.execute(f"select * from dates where userid = {user_id}")
+    cursor.execute(f"select * from dates where userid = '{user_id}'")
     list = []
     for record in cursor.fetchall():
         act_rec = []
