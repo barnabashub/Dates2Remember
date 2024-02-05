@@ -30,7 +30,7 @@ Dates2Remember is powered by a tech stack that's as reliable as your grandma's a
 
 - **Python**: The wizard behind the curtain, making everything run smoothly.
 - **Flask**: Our superhero web framework, ensuring a seamless user experience.
-- **DynamoDB**: Because every great app needs a trustworthy database.
+- **PostgreSQL**: Because every great app needs a trustworthy database.
 - **HTML/CSS/JavaScript**: May the Bootstrap be with you.
 
 ## Contribute and Make Memories Together 🤝
