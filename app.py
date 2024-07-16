@@ -5,6 +5,7 @@ from datetime import datetime
 import uuid
 import os
 import yaml
+import DatesHark
 
 # config to postgres
 try:
@@ -89,6 +90,41 @@ def getsaveddatas(user_id):
         list.append(act_rec)
     print("now ", list)
     return jsonify(list)
+
+@app.route("/api/<user_id>_dashboard", methods=['GET'])
+def get_user_dashboard(user_id):
+    try:
+        cursor.execute(f"select name, date from dates where user_id = '{user_id}'")
+        dates = cursor.fetchall()
+        datelib = []
+        for i in range(len(dates)):
+            jubibool = DatesHark.DatesHark.is_jubilee(dates[i][1])
+            nextdate = DatesHark.DatesHark.get_next_dates(dates[i][1], 1)
+            datelib[dates[i][0]].append({
+                'name': dates[i][0],
+                'is_jubilee': jubibool,
+                'next_date': nextdate
+            })
+        return datelib
+    except Exception as e:
+        return {'error': e}
+    
+@app.route("api/<date>/get_howold_inmonths", methods=['GET'])
+def get_howold_inmonts(date):
+    return DatesHark.DatesHark.get_howold_inmonths(date, datetime.now())
+
+@app.route("api/<date>/get_howold_indays", methods=['GET'])
+def get_howold_indays(date):
+    return DatesHark.DatesHark.get_howold_indays(date, datetime.now())
+
+@app.route("api/<date>/any_jubilee", methods=['GET'])
+def any_jubilee(date):
+    return DatesHark.DatesHark.any_jubilee(date, datetime.now())
+
+@app.route("api/<date>/get_next_dates_<quantity>", methods=['GET'])
+def get_next_dates(date, quantity):
+    return DatesHark.DatesHark.get_next_dates(date, quantity)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
