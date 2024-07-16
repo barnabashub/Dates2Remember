@@ -125,6 +125,21 @@ def any_jubilee(date):
 def get_next_dates(date, quantity):
     return DatesHark.DatesHark.get_next_dates(date, quantity)
 
+@app.route("api/<user_id>/get_next_dates_<quantity>", methods=['GET'])
+def get_next_dates_user(user_id, quantity):
+    cursor.execute(f"select date, name from dates where user_id = '{user_id}'")
+    dates = cursor.fetchall()
+    returnable = []
+    for i in range(len(dates)):
+        pre_dates = DatesHark.DatesHark.get_next_dates(dates[i][0], quantity)
+        for x in range(len(pre_dates)):
+            returnable.append({
+                'name': dates[i][1],
+                'date': pre_dates[x]
+            })
+    returnable.sort(key=lambda x: datetime.strptime(x, '%Y-%m-%d'))
+    return jsonify(returnable)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
