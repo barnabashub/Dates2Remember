@@ -109,23 +109,23 @@ def get_user_dashboard(user_id):
     except Exception as e:
         return {'error': e}
     
-@app.route("api/<date>/get_howold_inmonths", methods=['GET'])
+@app.route("/api/<date>/get_howold_inmonths", methods=['GET'])
 def get_howold_inmonts(date):
     return DatesHark.DatesHark.get_howold_inmonths(date, datetime.now())
 
-@app.route("api/<date>/get_howold_indays", methods=['GET'])
+@app.route("/api/<date>/get_howold_indays", methods=['GET'])
 def get_howold_indays(date):
     return DatesHark.DatesHark.get_howold_indays(date, datetime.now())
 
-@app.route("api/<date>/any_jubilee", methods=['GET'])
+@app.route("/api/<date>/any_jubilee", methods=['GET'])
 def any_jubilee(date):
     return DatesHark.DatesHark.any_jubilee(date, datetime.now())
 
-@app.route("api/<date>/get_next_dates_<quantity>", methods=['GET'])
+@app.route("/api/<date>/get_next_dates_<quantity>", methods=['GET'])
 def get_next_dates(date, quantity):
     return DatesHark.DatesHark.get_next_dates(date, quantity)
 
-@app.route("api/<user_id>/get_next_dates_<quantity>", methods=['GET'])
+@app.route("/api/<user_id>/get_next_dates_<quantity>", methods=['GET'])
 def get_next_dates_user(user_id, quantity):
     cursor.execute(f"select date, name from dates where user_id = '{user_id}'")
     dates = cursor.fetchall()
