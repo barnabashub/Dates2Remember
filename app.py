@@ -41,6 +41,14 @@ except Exception as e:
 def welcome():
     return render_template('index.html')
 
+@app.route('/<user_id>')
+def render_userpage(user_id):
+    return render_template('userdashboard.html', datelib = get_user_dashboard(user_id))
+
+@app.route('/<user_id>/<date_id>')
+def render_datepage(user_id, date_id):
+    return render_template('datepage.html', info = get_date_info(date_id), user=user_id)
+
 # User page with id
 @app.route('/d/<user_id>')
 def user_page(user_id):
@@ -108,6 +116,10 @@ def get_user_dashboard(user_id):
         return datelib
     except Exception as e:
         return {'error': e}
+    
+def get_date_info(date_id):
+    cursor.execute(f"select name, date, description from dates where date_id = '{date_id}'")
+    return cursor.fetchall()
     
 @app.route("/api/<date>/get_howold_inmonths", methods=['GET'])
 def get_howold_inmonts(date):
