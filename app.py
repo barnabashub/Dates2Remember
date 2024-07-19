@@ -1,6 +1,6 @@
+import sqlite3
 from flask import Flask, jsonify, render_template, request, send_from_directory
 from flask_wtf.csrf import CSRFProtect
-import psycopg2
 from datetime import datetime
 import uuid
 import os
@@ -18,23 +18,15 @@ app = Flask(__name__)
 csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = config['appconfigsecretkey']
 
-try:
-    db_host = config['host']
-    db_port = config['port']
-    db_user = config['user']
-    db_password = config['password']
-    db_name = config['database']
+# Assuming your SQLite DB file is named 'database.db'
+DATABASE = 'dates-dev.db'
 
-    connection = psycopg2.connect(
-        host=db_host,
-        port=db_port,
-        user=db_user,
-        password=db_password,
-        database=db_name
-    )
-    cursor = connection.cursor()
-except Exception as e:
-    print(f"Error: {e}")
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name']
+    return conn
+
+get_db_connection()
 
 # Welcome page
 @app.route('/')
@@ -53,6 +45,8 @@ def render_datepage(user_id, date_id):
 @app.route('/d/<user_id>')
 def user_page(user_id):
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute(f"select user_id from users where user_id = '{user_id}'")
         if len(cursor.fetchall()) == 1:
             return render_template('d.html')
@@ -70,6 +64,8 @@ def call_create_new_page():
 @app.route('/create_new', methods=['POST'])
 def save_data():
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute(f"insert into users (username, creationdate) values ('{request.form.get('dataName')}', '{str(datetime.now())}')")
         cursor.execute("select * from users")
         return jsonify({'message': 'Data saved successfully', 'select': cursor.fetchall()})
@@ -79,7 +75,6 @@ def save_data():
 # File getter
 @app.route('/static/<filename>')
 def serve_static(filename):
-    print(f"getting file {filename}")
     return send_from_directory('templates', filename)
 
 # 404 error
@@ -89,6 +84,8 @@ def not_found(e):
 
 @app.route("/api/data/<user_id>/getsaveddatas")
 def getsaveddatas(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
     cursor.execute(f"select * from dates where userid = '{user_id}'")
     list = []
     for record in cursor.fetchall():
@@ -96,28 +93,34 @@ def getsaveddatas(user_id):
         for item in record:
             act_rec.append(str(item))
         list.append(act_rec)
-    print("now ", list)
     return jsonify(list)
 
 @app.route("/api/<user_id>_dashboard", methods=['GET'])
 def get_user_dashboard(user_id):
     try:
-        cursor.execute(f"select name, date from dates where user_id = '{user_id}'")
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT name, date FROM Dates WHERE user_id = {user_id}")
         dates = cursor.fetchall()
         datelib = []
         for i in range(len(dates)):
-            jubibool = DatesHark.DatesHark.is_jubilee(dates[i][1])
+            jubibool = DatesHark.DatesHark.is_jubilee(dates[i][1], datetime.now())
             nextdate = DatesHark.DatesHark.get_next_dates(dates[i][1], 1)
-            datelib[dates[i][0]].append({
+            if len(nextdate) == 1:
+                nextdate = nextdate[0]
+            datelib.append({
+                'date': dates[i][1],
                 'name': dates[i][0],
                 'is_jubilee': jubibool,
                 'next_date': nextdate
             })
         return datelib
     except Exception as e:
-        return {'error': e}
+        return {'error': str(e)}
     
 def get_date_info(date_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
     cursor.execute(f"select name, date, description from dates where date_id = '{date_id}'")
     return cursor.fetchall()
     
@@ -139,6 +142,8 @@ def get_next_dates(date, quantity):
 
 @app.route("/api/<user_id>/get_next_dates_<quantity>", methods=['GET'])
 def get_next_dates_user(user_id, quantity):
+    conn = get_db_connection()
+    cursor = conn.cursor()
     cursor.execute(f"select date, name from dates where user_id = '{user_id}'")
     dates = cursor.fetchall()
     returnable = []
@@ -154,4 +159,4 @@ def get_next_dates_user(user_id, quantity):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, use_debugger=True)
