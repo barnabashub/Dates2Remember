@@ -37,9 +37,13 @@ def welcome():
 def render_userpage(user_id):
     return render_template('userdashboard.html', datelib = get_user_dashboard(user_id))
 
-@app.route('/<user_id>/<date_id>')
-def render_datepage(user_id, date_id):
-    return render_template('datepage.html', info = get_date_info(date_id), user=user_id)
+@app.route('/datepage_<date_id>')
+def render_datepage(date_id):
+    cursor = get_db_connection().cursor()
+    cursor.execute(f"select date from Dates where date_id = {date_id};")
+    mydate = cursor.fetchall()[0][0]
+
+    return render_template('datepage.html', info = get_date_info(date_id), datelib = get_next_dates(mydate, 5))
 
 # User page with id
 @app.route('/d/<user_id>')
@@ -100,7 +104,7 @@ def get_user_dashboard(user_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(f"SELECT name, date FROM Dates WHERE user_id = {user_id}")
+        cursor.execute(f"SELECT name, date, date_id FROM Dates WHERE user_id = {user_id}")
         dates = cursor.fetchall()
         datelib = []
         for i in range(len(dates)):
@@ -112,7 +116,8 @@ def get_user_dashboard(user_id):
                 'date': dates[i][1],
                 'name': dates[i][0],
                 'is_jubilee': jubibool,
-                'next_date': nextdate
+                'next_date': nextdate,
+                'date_id': dates[i][2]
             })
         return datelib
     except Exception as e:
@@ -121,8 +126,13 @@ def get_user_dashboard(user_id):
 def get_date_info(date_id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f"select name, date, description from dates where date_id = '{date_id}'")
-    return cursor.fetchall()
+    cursor.execute(f"select name, date, description from Dates where date_id = {date_id};")
+    selected = cursor.fetchall()
+    return {
+        'name': selected[0][0],
+        'date': selected[0][1],
+        'description': selected[0][2]
+    }
     
 @app.route("/api/<date>/get_howold_inmonths", methods=['GET'])
 def get_howold_inmonts(date):
@@ -156,6 +166,12 @@ def get_next_dates_user(user_id, quantity):
             })
     returnable.sort(key=lambda x: datetime.strptime(x, '%Y-%m-%d'))
     return jsonify(returnable)
+
+@app.route('/api/get_when_will', methods=['GET'])
+def get_when_will():
+    day = request.args.get('day')
+    date = request.args.get('date')
+    return DatesHark.DatesHark.when_will_day_basedon_day(date, day)
 
 
 if __name__ == '__main__':

@@ -50,6 +50,7 @@ class DatesHark:
             date = f"{dateobj.year}-{dateobj.month}-{dateobj.day}"
             if DatesHark.any_jubilee(date, original_date):
                 found_dates.append(date)
+        print(found_dates)
         return found_dates
 
     @staticmethod
@@ -64,3 +65,10 @@ class DatesHark:
         dt1 = datetime.strptime(date1["date"], "%Y-%m-%d")
         dt2 = date2
         return (dt2.year - dt1.year) * 12 + dt2.month - dt1.month
+    
+    @staticmethod
+    def when_will_day_basedon_day(date, days):
+        if isinstance(date, str):
+            date = datetime.strptime(date, "%Y-%m-%d")
+        date += timedelta(days=int(days))
+        return date.strftime("%Y-%m-%d")
