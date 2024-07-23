@@ -16,3 +16,28 @@ function sendRequest() {
       });
   }
 }
+
+function onAfterInit() {
+  const date = document.getElementById("datedate").textContent;
+  const daysapiurl = `/api/${date}/get_howold_indays`;
+  fetch(daysapiurl)
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("daysagotext").textContent = data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  const monthapiurl = `/api/${date}/get_howold_inmonths`;
+  fetch(monthapiurl)
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("monthagotext").textContent = data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+window.onload = onAfterInit;

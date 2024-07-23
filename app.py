@@ -136,11 +136,11 @@ def get_date_info(date_id):
     
 @app.route("/api/<date>/get_howold_inmonths", methods=['GET'])
 def get_howold_inmonts(date):
-    return DatesHark.DatesHark.get_howold_inmonths(date, datetime.now())
+    return str(DatesHark.DatesHark.get_howold_inmonths(date, datetime.now()))
 
 @app.route("/api/<date>/get_howold_indays", methods=['GET'])
 def get_howold_indays(date):
-    return DatesHark.DatesHark.get_howold_indays(date, datetime.now())
+    return str(DatesHark.DatesHark.get_howold_indays(date, datetime.now()))
 
 @app.route("/api/<date>/any_jubilee", methods=['GET'])
 def any_jubilee(date):

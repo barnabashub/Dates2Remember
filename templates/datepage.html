@@ -3,26 +3,43 @@
 <script src="/static/datepage.js"></script>
 
 <div class="card">
-{{ info.name }}</h5>
-    <p class="card-text">{{ info.description }}</p>
-    <p class="card-date">{{ info.date }}<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">The next important dates:</h5>
-    {% for record in datelib %}
-    <p class="card-date">{{ record }}</p>
-    {% endfor %}
+  {{ info.name }}</h5>
+  <p class="card-text">{{ info.description }}</p>
+  <p id="datedate" >{{ info.date }}</p>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">The next important dates:</h5>
+      {% for record in datelib %}
+      <p class="card-date">{{ record }}</p>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 <div class="card-body">
-    <h5 class="card-title">When will be ...</h5>
-    <div class="row">
+  <h5 class="card-title">When will be ...</h5>
+  <div class="row">
     <p class="card-text">the </p>
     <input type="number" id="userInput" onkeyup="sendRequest()" />
     <p class="card-text">'th day after the date of {{ info.name }} </p>
+  </div>
+  <p class="card-text" id="response"></p>
 </div>
-    <p class="card-text" id="response"></p>
-</div>
+<div class="card">
+  <div class="class-body">
+    <div class="row">
+      <div class="card-text">This date was </div>
+      <p class="card-text" id="daysagotext"></p>
+      <div class="card-text"> days ago.</div>
+    </row>
+  </div>
+  <div class="class-body">
+    <div class="row">
+      <div class="card-text">This date was </div>
+      <p class="card-text" id="monthagotext"></p>
+      <div class="card-text"> month ago.</div>
+    </row>
+  </div>
 </div>
 
 

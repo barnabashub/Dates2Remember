@@ -55,14 +55,16 @@ class DatesHark:
 
     @staticmethod
     def get_howold_indays(date1, date2):
-        dt1 = datetime.strptime(date1["date"], "%Y-%m-%d")
+        print("date12", date1)
+        dt1 = datetime.strptime(date1, "%Y-%m-%d")
+        print(dt1)
         dt2 = date2
         delta = abs((dt2 - dt1).days)
         return delta
 
     @staticmethod
     def get_howold_inmonths(date1, date2):
-        dt1 = datetime.strptime(date1["date"], "%Y-%m-%d")
+        dt1 = datetime.strptime(date1, "%Y-%m-%d")
         dt2 = date2
         return (dt2.year - dt1.year) * 12 + dt2.month - dt1.month
     
