@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %} {% for record in datelib %}
+<div class="card">
+  <a href="/datepage_{{ record.date_id }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ record.name }}</h5>
+      <p class="card-text">Is Jubilee: {{ record.is_jubilee }}</p>
+      <p class="card-text">Next Date: {{ record.next_date }}</p>
+    </div>
+  </a>
+</div>
+
+{% endfor %} {% endblock %}
